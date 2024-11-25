@@ -1,4 +1,5 @@
 import gym
+import gym.envs
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,13 +9,12 @@ from tqdm import tqdm
 
 from agent import *
 from environment import *
-from blackjack import *
 
 def simulate(env_name, params, num_simul, num_episodes, eval_every, alpha, folder_path):
     num_exp = len(params); assert num_exp <= 4
 
 
-    print(f'\nEnvironment:{env_name}\tRun:{num_simul}\tSave:{folder_path}')
+    print(f'\nEnvironment:{env_name}\nRun:{num_simul}\nSave:{folder_path}\n')
 
 
     algorithm = {i:params[i]['algorithm'] for i in range(num_exp)}
@@ -24,8 +24,7 @@ def simulate(env_name, params, num_simul, num_episodes, eval_every, alpha, folde
     for exp in range(num_exp):
         print(f'\n---------- Experiment {exp} ----------')
         for _ in tqdm(range(num_simul)):
-            # if env_name=='blackjack': env = gym.make('Blackjack-v1')
-            if env_name=='blackjack': env=CardCountingBlackjackEnv()
+            if env_name=='blackjack': env = gym.make('Blackjack-v1')
             elif env_name=='tictactoe': env = TicTacToe(board_size=3)
             elif env_name=='21': env = TwentyOneGameEnv()
             agent = QLearningAgent(env, params[exp], eval_every)
@@ -89,21 +88,22 @@ def simulate(env_name, params, num_simul, num_episodes, eval_every, alpha, folde
     plt.legend(loc='best', frameon=True)
 
     plt.xlim([0, num_episodes])
-    plt.ylim([ymin*1.3, ymax*1.1])
+    if ymin<0: plt.ylim([ymin*1.3, ymax*1.1])
+    else: plt.ylim([ymin*0.8, ymax*1.1])
 
     # plt.xlim([0, 500])
     # plt.ylim([-100, 500])
 
-    plt.tight_layout()
-    plt.savefig(folder_path)
+    # plt.tight_layout()
+    plt.savefig(f'{folder_path}{env_name}_budget.png')
 
 
 
     # betting history (not average)
     plt.clf()
     x_betting = np.array(list(range(len(betting_over_time))))
-    plt.scatter(x_betting, betting_over_time, color=color_list[0], label='q-learning (lcb)')
-    plt.show()
+    plt.scatter(x_betting, betting_over_time, color=color_list[0], label='q-learning (lcb)', s=0.5)
+    plt.savefig(f'{folder_path}{env_name}_betting.png')
 
 
 

@@ -106,6 +106,9 @@ class QLearningAgent:
 
             done = False
 
+            # if episode==800:
+            #     print('here')
+
             while not done:
                 
                 # epsilon decay
@@ -123,7 +126,7 @@ class QLearningAgent:
                 next_state, reward, done, _, _ = self.env.step(action)
 
                 # update Q-value
-                self.update_Q_values(state, action, reward, next_state, done, beta, episode) # we do not consider betting for update Q-values
+                self.update_Q_values(state, action, reward, next_state, done, beta, episode) # Q ucb
                 self.update_Q_values_lcb(state, action, reward, next_state, done, beta, episode) # Q lcb
                 
                 # update current state
@@ -151,7 +154,6 @@ class BettingAgent:
         assert betting_strategy in ['min', 'max', 'random', 'lcb']
         self.betting_strategy = betting_strategy
         self.threshold = threshold
-        pass
 
     def bet(self, state, Q_ucb, Q_lcb, possible_bet, current_budget):
         if self.betting_strategy =='min':
@@ -173,11 +175,15 @@ class BettingAgent:
         return np.random.choice(possible_bet)
 
     def lcb_bet(self, state, Q_ucb, Q_lcb, possible_bet, current_budget, threshold):
-        reward_ucb = np.max(Q_ucb[state]) * np.ones_like(possible_bet)
-        reward_lcb = np.max(Q_lcb[state]) * np.ones_like(possible_bet)
+        reward_lcb = Q_lcb[state][int(np.argmax(Q_ucb[state]))]
+        if reward_lcb==0: return min(possible_bet) # min bet at the begining of learning
+
+
+        # budget depend
+        # budget_lcb = current_budget * np.ones_like(possible_bet) + reward_lcb * np.array(possible_bet)
         
-        budget_ucb = current_budget * np.ones_like(possible_bet) + reward_ucb
-        budget_lcb = current_budget * np.ones_like(possible_bet) + reward_lcb
+        # budget independent
+        budget_lcb = reward_lcb * np.array(possible_bet)
 
         best_bet = min(possible_bet)
         for i in range(len(possible_bet)):

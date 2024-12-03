@@ -10,16 +10,15 @@ import random
 import numpy as np
 import pickle
 from flask import Flask
-import torch
-import uvicorn
+
 from fastapi.responses import RedirectResponse
 
 # FastAPI 애플리케이션 초기화
 app = FastAPI()
-
 project_root = Path(__file__).resolve().parent.parent
 sys.path.append(str(project_root / "models"))
-
+from ddqn.ddqn_agent import DDQNAgent
+from dqn.dqn_agent import DQNAgent
 
 # Flask 서버 초기화
 
@@ -40,8 +39,7 @@ with open("./compare/action_file/ucb_qlearning_model.pkl", "rb") as f:
     ucb_q_table = pickle.load(f)
 
 # DQN/DDQN 에이전트 초기화 (PyTorch 모델 로드)
-from ddqn.ddqn_agent import DDQNAgent
-from dqn.dqn_agent import DQNAgent
+
 env = gym.make("Blackjack-v1")
 dqn_agent = DQNAgent(env)
 dqn_agent.load_model("./compare/action_file/dqn_model.pth")

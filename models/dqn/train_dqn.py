@@ -9,8 +9,8 @@ agent = DQNAgent(env, learning_rate=0.01, discount_factor=0.99, epsilon_start=1.
 
 balance_history = agent.train(num_episodes=5000)
 
-compare_dir = Path(__file__).resolve().parent.parent.parent  / "compare" / "pkl"
-compare_dir.mkdir(exist_ok=True)  
+compare_dir = Path(__file__).resolve().parent.parent.parent  / "compare" / "action_file"
+compare_dir.mkdir(exist_ok=True) 
 
 dqn_table_path = compare_dir / "dqn_model.pth"
 agent.save_model(dqn_table_path)

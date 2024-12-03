@@ -9,8 +9,8 @@ agent = DDQNAgent(env, learning_rate=0.01, discount_factor=0.99, epsilon_start=1
 
 agent.train(num_episodes=10000)
 
-compare_dir = Path(__file__).resolve().parent.parent.parent  / "compare" / "pkl"
-compare_dir.mkdir(exist_ok=True)  
+compare_dir = Path(__file__).resolve().parent.parent.parent  / "compare" / "action_file"
+compare_dir.mkdir(exist_ok=True) 
 
 ddqn_table_path = compare_dir / "ddqn_model.pth"
 agent.save_model(ddqn_table_path)

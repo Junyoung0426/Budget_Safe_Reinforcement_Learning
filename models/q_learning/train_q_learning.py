@@ -8,7 +8,7 @@ agent = QLearningAgent(env, learning_rate=0.1, discount_factor=0.99, epsilon_sta
 
 agent.train(num_episodes=500)
 
-compare_dir = Path(__file__).resolve().parent.parent.parent  / "compare" / "pkl"
+compare_dir = Path(__file__).resolve().parent.parent.parent  / "compare" / "action_file"
 compare_dir.mkdir(exist_ok=True) 
 
 q_table_path = compare_dir / "q_learning_model.pkl"

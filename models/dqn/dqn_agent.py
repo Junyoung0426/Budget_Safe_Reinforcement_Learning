@@ -50,20 +50,24 @@ class DQNAgent:
         self.memory.append((state, action, reward, next_state, done))
 
     def act(self, state, testing=False):
+    
         if isinstance(state, torch.Tensor):
             state = state.cpu().numpy()
     
-        q_values = self.policy_network(torch.FloatTensor(state).unsqueeze(0).to(self.device)).cpu().detach().numpy().flatten()
+        # Q-value 계산 (self.model 사용)
+        q_values = self.model(torch.FloatTensor(state).unsqueeze(0).to(self.device)).cpu().detach().numpy().flatten()
     
+        # 테스트 모드
         if testing:
-            max_actions = np.flatnonzero(q_values == q_values.max())  
-            return np.random.choice(max_actions) 
+            max_actions = np.flatnonzero(q_values == q_values.max())
+            return np.random.choice(max_actions)
     
-        if np.random.rand() < self.epsilon:
-            return self.env.action_space.sample()  
-        else:
-            max_actions = np.flatnonzero(q_values == q_values.max())  #
-            return np.random.choice(max_actions)  
+        # Exploration vs Exploitation
+        if np.random.rand() < self.epsilon:  # Exploration
+            return self.env.action_space.sample()
+        else:  # Exploitation
+            max_actions = np.flatnonzero(q_values == q_values.max())
+            return np.random.choice(max_actions)
         
     def replay(self):
         if len(self.memory) < self.batch_size:

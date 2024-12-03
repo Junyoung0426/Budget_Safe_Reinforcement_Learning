@@ -26,7 +26,7 @@ class QLearningAgent:
         if np.random.rand() < self.epsilon:
             return self.env.action_space.sample()
         else:
-            max_action = np.flatnonzero(self.Q_values[state] == self.Q_values[state].max())
+            max_action = np.flatnonzero(self.Q[state] == self.Q[state].max())
             action = np.random.choice(max_action)
             return action
 

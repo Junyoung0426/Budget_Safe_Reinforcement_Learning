@@ -10,23 +10,24 @@ from tqdm import tqdm
 from agent import *
 from environment import *
 
-def simulate(env_name, params, num_simul, num_episodes, eval_every, alpha, folder_path):
+def simulate(env_name, params, num_simul, num_episodes, eval_every, ci_alpha, line_alpha, folder_path):
     num_exp = len(params); assert num_exp <= 4
 
 
-    print(f'\nEnvironment:{env_name}\nRun:{num_simul}\nSave:{folder_path}\n')
+    print(f'\nEnvironment:{env_name}\nRun:{num_simul}\nSave:{folder_path}\nNum. Experiment:{num_exp}')
 
 
     algorithm = {i:params[i]['algorithm'] for i in range(num_exp)}
     score = {i:[] for i in range(num_exp)}
     money = {i:[] for i in range(num_exp)}
+    betting_over_time = []
+    line_color = {'lcb':'green', 'max':'blue', 'min':'red', 'random':'purple'}
     
     for exp in range(num_exp):
         print(f'\n---------- Experiment {exp} ----------')
         for _ in tqdm(range(num_simul)):
             if env_name=='blackjack': env = gym.make('Blackjack-v1')
             elif env_name=='tictactoe': env = TicTacToe(board_size=3)
-            elif env_name=='21': env = TwentyOneGameEnv()
             agent = QLearningAgent(env, params[exp], eval_every)
             agent.train(num_episodes)
             score[exp].append(agent.score)
@@ -45,7 +46,7 @@ def simulate(env_name, params, num_simul, num_episodes, eval_every, alpha, folde
 
 
 
-    z = 1.0
+    z = 1.96 # confidence interval constant
     x_reward = np.array(list(range(len(mean_score[0])))) * eval_every
     x_money = np.array(list(range(len(mean_money[0]))))
     color_list = ['blue','green','orange','purple']
@@ -73,8 +74,8 @@ def simulate(env_name, params, num_simul, num_episodes, eval_every, alpha, folde
     for exp in range(num_exp):
         ymax = max(ymax, np.max(mean_money[exp]))
         ymin = min(ymin, np.min(mean_money[exp]))
-        plt.plot(x_money, mean_money[exp], color=color_list[exp], label=algorithm[exp])
-        plt.fill_between(x_money, mean_money[exp]-z*std_money[exp], mean_money[exp]+z*std_money[exp], color=color_list[exp], alpha=alpha, linewidth=0.0)
+        plt.plot(x_money, mean_money[exp], color=line_color[params[exp]['betting_strategy']], label=algorithm[exp], alpha=line_alpha[exp])
+        plt.fill_between(x_money, mean_money[exp]-z*std_money[exp], mean_money[exp]+z*std_money[exp], color=line_color[params[exp]['betting_strategy']], alpha=ci_alpha, linewidth=0.0)
 
     plt.ylabel('Budget', fontsize=10)
     plt.xlabel('Episode', fontsize=10)
@@ -82,19 +83,18 @@ def simulate(env_name, params, num_simul, num_episodes, eval_every, alpha, folde
     plt.xticks([int(num_episodes*0.25),int(num_episodes*0.50), int(num_episodes*0.75), int(num_episodes*1.0)])
 
     # plot bust-line
-    plt.text(num_episodes*0.6 , -200, 'Bust-Line', fontsize=10, color='black')
+    plt.text(num_episodes*0.6 , 0, 'Bust-Line', fontsize=10, color='black')
     plt.plot(x_money, np.zeros_like(x_money), color='black', linewidth=2.0, linestyle='-.')
     
     plt.legend(loc='best', frameon=True)
 
+
+    # crop
     plt.xlim([0, num_episodes])
     if ymin<0: plt.ylim([ymin*1.3, ymax*1.1])
     else: plt.ylim([ymin*0.8, ymax*1.1])
 
-    # plt.xlim([0, 500])
-    # plt.ylim([-100, 500])
-
-    # plt.tight_layout()
+    plt.tight_layout()
     plt.savefig(f'{folder_path}{env_name}_budget.png')
 
 
@@ -102,7 +102,9 @@ def simulate(env_name, params, num_simul, num_episodes, eval_every, alpha, folde
     # betting history (not average)
     plt.clf()
     x_betting = np.array(list(range(len(betting_over_time))))
-    plt.scatter(x_betting, betting_over_time, color=color_list[0], label='q-learning (lcb)', s=0.5)
+    plt.scatter(x_betting, betting_over_time, color='green', label='Conservative Betting (ours)', s=0.5)
+    plt.ylabel('Betting', fontsize=10)
+    plt.xlabel('Episode', fontsize=10)
     plt.savefig(f'{folder_path}{env_name}_betting.png')
 
 

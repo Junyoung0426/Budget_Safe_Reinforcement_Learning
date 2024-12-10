@@ -69,9 +69,9 @@ class QLearningAgent:
         future_q_value = 0 if done else np.max(self.Q_values[next_state])
 
         td_target = reward + self.discount_factor * future_q_value
-        
+
         td_error = td_target - self.Q_values[state][action] + beta[0] * np.sqrt(np.log(max(1,episode)) / max(1, self.N_counters[state][action]))
-        self.Q_values[state][action] += self.learning_rate(episode) * td_error
+        self.Q_values[state][action] += self.learning_rate(self.N_counters[state][action]) * td_error
 
     def update_Q_values_lcb(self, state, action, reward, next_state, done, beta, episode):
         future_q_value = 0 if done else np.max(self.Q_values_lcb[next_state])
@@ -79,7 +79,7 @@ class QLearningAgent:
         td_target = reward + self.discount_factor * future_q_value
         
         td_error = td_target - self.Q_values_lcb[state][action] - beta[1] * np.sqrt(np.log(max(1,episode)) / max(1, self.N_counters[state][action]))
-        self.Q_values_lcb[state][action] += self.learning_rate(episode) * td_error
+        self.Q_values_lcb[state][action] += self.learning_rate(self.N_counters[state][action]) * td_error
 
 
 
@@ -101,13 +101,9 @@ class QLearningAgent:
             # betting after observe the starting state
             # in fact, in real-world casino we bet before the starting state is observed
             # however, in this work, we bet after the starting state opened to see the learning of betting strategy
-            betting = self.betting_agent.bet(state, self.Q_values, self.Q_values_lcb, self.possible_bet, self.money_over_time[-1])
-            self.betting_over_time.append(betting)
+            betting = self.betting_agent.bet(state, self.Q_values, self.Q_values_lcb, self.possible_bet, self.money_over_time[-1],self.money_over_time[0], episode, num_episodes)
 
             done = False
-
-            # if episode==800:
-            #     print('here')
 
             while not done:
                 
@@ -134,8 +130,9 @@ class QLearningAgent:
 
                 if not done:
                     if self.dynamic_betting is True:
-                        betting += self.betting_agent.bet(state, self.Q_values, self.Q_values_lcb, self.dynamic_possible_bet, self.money_over_time[-1])
-
+                        betting += self.betting_agent.bet(state, self.Q_values, self.Q_values_lcb, self.dynamic_possible_bet, self.money_over_time[-1], self.money_over_time[0], episode, num_episodes)
+            
+            self.betting_over_time.append(betting)
             current_money = self.money_over_time[-1] + reward*betting
             self.money_over_time.append(current_money)
 
@@ -155,7 +152,7 @@ class BettingAgent:
         self.betting_strategy = betting_strategy
         self.threshold = threshold
 
-    def bet(self, state, Q_ucb, Q_lcb, possible_bet, current_budget):
+    def bet(self, state, Q_ucb, Q_lcb, possible_bet, current_budget, initial_budget, episode, num_episode):
         if self.betting_strategy =='min':
             return self.min_bet(possible_bet)
         if self.betting_strategy=='max':
@@ -163,7 +160,7 @@ class BettingAgent:
         if self.betting_strategy=='random':
             return self.random_bet(possible_bet)
         if self.betting_strategy=='lcb':
-            return self.lcb_bet(state, Q_ucb, Q_lcb, possible_bet, current_budget, self.threshold)
+            return self.lcb_bet(state, Q_ucb, Q_lcb, possible_bet, current_budget, self.threshold, initial_budget, episode, num_episode)
 
     def min_bet(self, possible_bet):
         return np.min(possible_bet)
@@ -174,13 +171,9 @@ class BettingAgent:
     def random_bet(self, possible_bet):
         return np.random.choice(possible_bet)
 
-    def lcb_bet(self, state, Q_ucb, Q_lcb, possible_bet, current_budget, threshold):
+    def lcb_bet(self, state, Q_ucb, Q_lcb, possible_bet, current_budget, threshold, initial_budget, episode, num_episode):
         reward_lcb = Q_lcb[state][int(np.argmax(Q_ucb[state]))]
-        if reward_lcb==0: return min(possible_bet) # min bet at the begining of learning
-
-
-        # budget depend
-        # budget_lcb = current_budget * np.ones_like(possible_bet) + reward_lcb * np.array(possible_bet)
+        if reward_lcb==0: return min(possible_bet)
         
         # budget independent
         budget_lcb = reward_lcb * np.array(possible_bet)

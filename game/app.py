@@ -7,10 +7,8 @@ from dash import Dash, dcc, html, callback_context
 from dash.dependencies import Input, Output, State
 from flask import Flask
 import random
-import pickle
 import gym
 import numpy as np
-import uvicorn
 from fastapi.responses import RedirectResponse
 
 project_root = Path(__file__).resolve().parent.parent
@@ -20,16 +18,14 @@ from dqn.dqn_agent import DQNAgent
 app = FastAPI()
 
 
-# CSS 파일 경로 지정
 external_stylesheets = ["./assets/style.css"]
 
 dash_app = Dash(
     __name__,
-    requests_pathname_prefix="/game/",  # Main 파일의 mount 경로와 일치
+    requests_pathname_prefix="/game/",  
     external_stylesheets=external_stylesheets
 )
 
-# 카드 이미지 경로와 초기 세팅
 def get_card_image(value, suit):
     card_value = str(value).upper()
     card_suit = suit.upper().replace(" ", "_")
@@ -65,7 +61,6 @@ initial_player_cards = []
 initial_dealer_cards = []
 game_over = False
 
-# Q-learning 모델 로드
 
 env = gym.make('Blackjack-v1')
 agent = DQNAgent(env)
@@ -84,12 +79,12 @@ def navbar():
                     "marginRight": "20px",
                     "padding": "10px 20px",
                     "textDecoration": "none",
-                    "color": "#4CAF50",  # 초록색 텍스트
-                    "backgroundColor": "#FFFFFF",  # 흰색 버튼
+                    "color": "#4CAF50",  
+                    "backgroundColor": "#FFFFFF", 
                     "borderRadius": "5px",
                     "fontSize": "16px",
                     "fontWeight": "bold",
-                    "boxShadow": "0px 2px 4px rgba(0, 0, 0, 0.2)",  # 버튼 그림자
+                    "boxShadow": "0px 2px 4px rgba(0, 0, 0, 0.2)",  
                     "transition": "background-color 0.3s ease",
                 },
             ),
@@ -100,12 +95,12 @@ def navbar():
                     "marginRight": "20px",
                     "padding": "10px 20px",
                     "textDecoration": "none",
-                    "color": "#4CAF50",  # 초록색 텍스트
-                    "backgroundColor": "#FFFFFF",  # 흰색 버튼
+                    "color": "#4CAF50",  
+                    "backgroundColor": "#FFFFFF",  
                     "borderRadius": "5px",
                     "fontSize": "16px",
                     "fontWeight": "bold",
-                    "boxShadow": "0px 2px 4px rgba(0, 0, 0, 0.2)",  # 버튼 그림자
+                    "boxShadow": "0px 2px 4px rgba(0, 0, 0, 0.2)", 
                     "transition": "background-color 0.3s ease",
                 },
             ),
@@ -113,15 +108,14 @@ def navbar():
         style={
             "padding": "15px",
             "textAlign": "center",
-            "backgroundColor": "rgba(255, 255, 255, 0.8)",  # 약간 투명한 흰색 배경
+            "backgroundColor": "rgba(255, 255, 255, 0.8)",  
             "boxShadow": "0px 4px 6px rgba(0, 0, 0, 0.1)",
-            "borderRadius": "10px",  # 살짝 둥근 네비게이션 바
-            "margin": "10px 20px",  # 화면에 여백 추가
+            "borderRadius": "10px",  
+            "margin": "10px 20px",  
         },
     )
 
-# 레이아웃 정의
-# Initial Balance와 Bet Amount 섹션
+
 dash_app.layout = html.Div([
     html.H1("Blackjack Game", style={'textAlign': 'center'}),
     navbar(),
@@ -132,7 +126,7 @@ dash_app.layout = html.Div([
             type="number", 
             value=1000000, 
             min=0, 
-            disabled=False,  # Play 이후 수정 불가 처리
+            disabled=False,  
             style={'width': '100px', 'textAlign': 'center'}
         ),
         html.Button(
@@ -195,11 +189,9 @@ dash_app.layout = html.Div([
     ])
 ])
 
-# 카드 이미지 렌더링 함수
 def render_card_images(cards):
     return [html.Img(src=get_card_image(value, suit), className="card") for (value, suit) in cards]
 
-# 점수판 업데이트 함수
 def update_scoreboard():
     total_games = score['win'] + score['lose'] + score['draw']
     winning_rate = (score['win'] / total_games) * 100 if total_games > 0 else 0 
@@ -211,19 +203,19 @@ def update_scoreboard():
         Output("initial-balance", "value"),
         Output("initial-balance", "disabled"),  
         Output("initial-balance-up", "disabled"),
-        Output("initial-balance-down", "disabled"),# Play 이후 수정 불가 처리
+        Output("initial-balance-down", "disabled"),
     ],
     [
         Input("initial-balance-up", "n_clicks"), 
         Input("initial-balance-down", "n_clicks"),
-        Input("play-btn", "n_clicks"),  # Play 클릭 여부 감지
+        Input("play-btn", "n_clicks"),  
     ],
     State("initial-balance", "value")
 )
 def update_initial_balance(up_clicks, down_clicks, play_clicks, current_balance):
     ctx = callback_context.triggered[0]["prop_id"]
     if ctx == "play-btn.n_clicks":
-        return current_balance, True, True, True  # Play 클릭 시 비활성화
+        return current_balance, True, True, True  
     elif ctx == "initial-balance-up.n_clicks":
         return current_balance + 10000, False, False, False
     elif ctx == "initial-balance-down.n_clicks" and current_balance >= 10000:
@@ -256,7 +248,7 @@ def update_bet_amount(up_clicks, down_clicks, current_bet):
         Output("stand-btn", "disabled"),
         Output("play-btn", "disabled"),
         Output("ai-play-btn", "disabled"),
-        Output("current-money-display", "children")  # Current Money 출력 추가
+        Output("current-money-display", "children")  
     ],
     [Input("play-btn", "n_clicks"), Input("hit-btn", "n_clicks"), Input("stand-btn", "n_clicks"), Input("new-round-btn", "n_clicks"), Input("ai-play-btn", "n_clicks")],
     [State("initial-balance", "value"), State("bet-amount", "value")]
@@ -264,11 +256,9 @@ def update_bet_amount(up_clicks, down_clicks, current_bet):
 def update_game(play_clicks, hit_clicks, stand_clicks, new_round_clicks, ai_play_clicks, initial_balance, bet_amount):
     global initial_player_cards, initial_dealer_cards, score, game_over
 
-    # 기본 값 초기화
     dealer_value = calculate_hand_value(initial_dealer_cards) if initial_dealer_cards else 0
     player_value = calculate_hand_value(initial_player_cards) if initial_player_cards else 0
 
-    # Determine which button was clicked
     ctx = callback_context
     triggered_button = ctx.triggered[0]['prop_id'].split('.')[0]
     if play_clicks == 0:
@@ -277,10 +267,9 @@ def update_game(play_clicks, hit_clicks, stand_clicks, new_round_clicks, ai_play
             render_card_images([]),
             "Click 'Play' to Start", update_scoreboard(),
             "", "",
-            True, True, True, False, True,  # 모든 버튼 비활성화 except Play
+            True, True, True, False, True,  
             f"Current Money: {score['Current_Money']}"
     )
-    # Play 버튼 클릭 시 초기화
     if triggered_button == "play-btn":
         score = {"win": 0, "lose": 0, "draw": 0, "total_reward": 0, 'Current_Money': initial_balance}
         initial_player_cards = [draw_random_card(), draw_random_card()]
@@ -295,12 +284,11 @@ def update_game(play_clicks, hit_clicks, stand_clicks, new_round_clicks, ai_play
             message, update_scoreboard(),
             f"Dealer Sum: {dealer_value}", f"Your Sum: {player_value}",
             True, False, False, True, False,
-            f"Current Money: {score['Current_Money']}"  # Current Money 출력
+            f"Current Money: {score['Current_Money']}"  
         )
 
     
     elif triggered_button == "new-round-btn":
-        # 게임 재시작 시 win, lose, draw 유지, total_reward 초기화
         initial_player_cards = [draw_random_card(), draw_random_card()]
         initial_dealer_cards = [draw_random_card()]
         game_over = False
@@ -313,24 +301,21 @@ def update_game(play_clicks, hit_clicks, stand_clicks, new_round_clicks, ai_play
             message, update_scoreboard(),
             f"Dealer Sum: {dealer_value}", f"Your Sum: {player_value}",
             True, False, False, True, False  ,
-            f"Current Money: {score['Current_Money']}"# 버튼 상태 설정
+            f"Current Money: {score['Current_Money']}"
         )
 
 
-    # AI Play 버튼 클릭
     elif triggered_button == "ai-play-btn" and not game_over:
-            # 현재 상태 계산
         player_value = calculate_hand_value(initial_player_cards)
         dealer_open_card = initial_dealer_cards[0][0] if isinstance(initial_dealer_cards[0][0], int) else 10
         is_soft = any(card[0] == "ACE" for card in initial_player_cards) and player_value + 10 <= 21
         state = (player_value, dealer_open_card, is_soft)
-        # AI 행동 결정
         try:
             action = agent.act(state, testing=True)
         except Exception as e:
             print(f"Exception in agent.act: {e}")
-            action = np.random.choice([0, 1])  # 랜덤 행동 선택
-        if action == 1:  # Hit
+            action = np.random.choice([0, 1])  
+        if action == 1:  
             initial_player_cards.append(draw_random_card())
             player_value = calculate_hand_value(initial_player_cards)
             if player_value > 21:
@@ -358,7 +343,7 @@ def update_game(play_clicks, hit_clicks, stand_clicks, new_round_clicks, ai_play
                     True, False, False, True, False,
                     f"Current Money: {score['Current_Money']}"
                 )
-        elif action == 0:  # Stand
+        elif action == 0:  
             dealer_value = calculate_hand_value(initial_dealer_cards)
             while dealer_value < 17:
                 initial_dealer_cards.append(draw_random_card())
@@ -386,7 +371,6 @@ def update_game(play_clicks, hit_clicks, stand_clicks, new_round_clicks, ai_play
                 f"Current Money: {score['Current_Money']}"
             )
 
-        # Hit 버튼 클릭
     elif triggered_button == "hit-btn" and not game_over:
         initial_player_cards.append(draw_random_card())
         player_value = calculate_hand_value(initial_player_cards)
@@ -414,10 +398,8 @@ def update_game(play_clicks, hit_clicks, stand_clicks, new_round_clicks, ai_play
             True, False, False, True, False,
             f"Current Money: {score['Current_Money']}"
         )
-    # 기본 상태 반환
     
 
-    # Stand 버튼 클릭
     elif triggered_button == "stand-btn" and not game_over:
         dealer_value = calculate_hand_value(initial_dealer_cards)
         while dealer_value < 17:
@@ -443,7 +425,6 @@ def update_game(play_clicks, hit_clicks, stand_clicks, new_round_clicks, ai_play
         game_over = True
         return render_card_images(initial_dealer_cards), render_card_images(initial_player_cards), message, update_scoreboard(), f"Dealer Sum: {dealer_value}", f"Your Sum: {player_value}", False, True, True, True, True,f"Current Money: {score['Current_Money']}"
 
-    # 기본 상태 반환
     return (
         render_card_images([initial_dealer_cards[0]] if initial_dealer_cards else []),      
         render_card_images(initial_player_cards if initial_player_cards else []),           
@@ -452,6 +433,5 @@ def update_game(play_clicks, hit_clicks, stand_clicks, new_round_clicks, ai_play
         not game_over, game_over, game_over, game_over, game_over,f"Current Money: {score['Current_Money']}"
     )
 
-# Dash를 FastAPI에 마운트
 app.mount("/", WSGIMiddleware(dash_app.server))
 

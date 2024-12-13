@@ -39,6 +39,7 @@ class DQNAgent:
         self.balance = initial_money
         self.balance_history = [initial_money]
         self.memory = deque(maxlen=memory_size)
+        self.win_rate = []
 
         state_size = len(env.observation_space.sample())
         action_size = env.action_space.n
@@ -54,18 +55,15 @@ class DQNAgent:
         if isinstance(state, torch.Tensor):
             state = state.cpu().numpy()
     
-        # Q-value 계산 (self.model 사용)
         q_values = self.model(torch.FloatTensor(state).unsqueeze(0).to(self.device)).cpu().detach().numpy().flatten()
     
-        # 테스트 모드
         if testing:
             max_actions = np.flatnonzero(q_values == q_values.max())
             return np.random.choice(max_actions)
     
-        # Exploration vs Exploitation
-        if np.random.rand() < self.epsilon:  # Exploration
+        if np.random.rand() < self.epsilon:  
             return self.env.action_space.sample()
-        else:  # Exploitation
+        else:  
             max_actions = np.flatnonzero(q_values == q_values.max())
             return np.random.choice(max_actions)
         
@@ -93,7 +91,6 @@ class DQNAgent:
 
     def train(self, num_episodes=10000, moving_avg_window=500):
         rewards_per_episode = []
-        win_rates = []
         total_wins = 0
 
         for episode in range(num_episodes):
@@ -112,22 +109,20 @@ class DQNAgent:
                 if done and reward > 0:
                     win = True
 
-            # Update balance
             self.balance += episode_reward * self.bet_amount
             self.balance_history.append(self.balance)
             rewards_per_episode.append(episode_reward)
             total_wins += int(win)
             win_rate = total_wins / (episode + 1)
-            win_rates.append(win_rate)
+            self.win_rate.append(win_rate)
 
             self.epsilon = max(self.epsilon * self.epsilon_decay, self.epsilon_end)
 
             if (episode + 1) % 100 == 0:
                 print_episode_summary(episode, episode_reward, win_rate, self.balance, self.epsilon)
 
-        # Moving average for rewards
         moving_avg_rewards = np.convolve(rewards_per_episode, np.ones(moving_avg_window) / moving_avg_window, mode='valid')
-        plot_results(win_rates, moving_avg_rewards, self.balance_history)
+        plot_results(self.win_rate, moving_avg_rewards, self.balance_history)
 
     def save_model(self, filename):
         torch.save(self.model.state_dict(), filename)

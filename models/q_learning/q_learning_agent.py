@@ -21,6 +21,7 @@ class QLearningAgent:
         self.bet_amount = bet_amount
         self.balance = initial_balance
         self.balance_history = [self.balance]
+        self.win_rate = []
     
     def choose_action(self, state):
         if np.random.rand() < self.epsilon:
@@ -37,7 +38,7 @@ class QLearningAgent:
         self.Q[state][action] += self.learning_rate * td_error
 
     def train(self, num_episodes=20000, moving_avg_window=500):
-        rewards, win_rates = [], []
+        rewards =  []
         total_wins = 0
 
         for episode in range(num_episodes):
@@ -62,7 +63,7 @@ class QLearningAgent:
             self.balance_history.append(self.balance)
             total_wins += int(win)
             win_rate = total_wins / (episode + 1)
-            win_rates.append(win_rate)
+            self.win_rate.append(win_rate)
 
             self.epsilon = max(self.epsilon * self.epsilon_decay, self.epsilon_min)
 
@@ -74,7 +75,8 @@ class QLearningAgent:
                 print_episode_summary(episode, total_reward, win_rate, self.balance, self.epsilon)
 
         moving_avg_rewards = np.convolve(rewards, np.ones(moving_avg_window) / moving_avg_window, mode='valid')
-        plot_results(win_rates, moving_avg_rewards, self.balance_history)
+        plot_results(self.win_rate, moving_avg_rewards, self.balance_history)
+    
 
     def evaluate_policy(self, num_episodes=100):
         total_reward = 0

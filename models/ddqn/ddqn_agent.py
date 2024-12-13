@@ -38,6 +38,7 @@ class DDQNAgent:
         self.balance = initial_money
         self.balance_history = [initial_money]
         self.memory = deque(maxlen=memory_size)
+        self.win_rate = []
 
         state_size = len(env.observation_space.sample())
         action_size = env.action_space.n
@@ -126,7 +127,7 @@ class DDQNAgent:
             rewards_per_episode.append(episode_reward)
             total_wins += int(win)
             win_rate = total_wins / (episode + 1)
-            win_rates.append(win_rate)
+            self.win_rate.append(win_rate)
 
             self.epsilon = max(self.epsilon * self.epsilon_decay, self.epsilon_end)
 
@@ -136,7 +137,7 @@ class DDQNAgent:
                 print_episode_summary(episode, episode_reward, win_rate, self.balance, self.epsilon)
 
         moving_avg_rewards = np.convolve(rewards_per_episode, np.ones(moving_avg_window) / moving_avg_window, mode='valid')
-        plot_results(win_rates, moving_avg_rewards, self.balance_history)
+        plot_results(self.win_rate, moving_avg_rewards, self.balance_history)
 
     def save_model(self, filename):
         torch.save(self.policy_network.state_dict(), filename)

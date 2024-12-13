@@ -14,6 +14,7 @@ class UCBQLearningAgent:
         self.initial_balance = initial_balance
         self.bet_amount = bet_amount
         self.balance = initial_balance
+        self.win_rate = []
         self.balance_history = [self.balance]
         self.Q = defaultdict(lambda: np.zeros(env.action_space.n))  
         self.N_counters = defaultdict(lambda: np.zeros(env.action_space.n)) 
@@ -21,7 +22,7 @@ class UCBQLearningAgent:
 
     def choose_action(self, state):
         
-        if np.random.rand() < self.eps:  # ε-탐욕 정책
+        if np.random.rand() < self.eps:  
             return self.env.action_space.sample()
         else:
             ucb_values = [
@@ -41,7 +42,6 @@ class UCBQLearningAgent:
     def train(self, num_episodes=20000, moving_avg_window=500):
         rewards = []
         total_wins = 0
-        win_rates = []
 
         for episode in range(num_episodes):
             state, _ = self.env.reset()
@@ -64,18 +64,17 @@ class UCBQLearningAgent:
             self.balance += total_reward * self.bet_amount
             self.balance_history.append(self.balance)
 
-            # 성능 기록
             rewards.append(total_reward)
             total_wins += int(win)
-            win_rates.append(total_wins / (episode + 1))
+            self.win_rate.append(total_wins / (episode + 1))
 
             self.eps = max(self.eps * self.eps_decay, 0.01)
 
             if (episode + 1) % 100 == 0:
-                print(f"Episode {episode + 1}: Total Reward: {total_reward:.2f}, Win Rate: {win_rates[-1]:.4f}, Balance: {self.balance:.2f}")
+                print(f"Episode {episode + 1}: Total Reward: {total_reward:.2f}, Win Rate: {self.win_rate[-1]:.4f}, Balance: {self.balance:.2f}")
 
         moving_avg_rewards = np.convolve(rewards, np.ones(moving_avg_window) / moving_avg_window, mode='valid')
-        self.plot_results(win_rates, moving_avg_rewards, self.balance_history)
+        self.plot_results(self.win_rate, moving_avg_rewards, self.balance_history)
 
     def plot_results(self, win_rates, moving_avg_rewards, balance_history):
        

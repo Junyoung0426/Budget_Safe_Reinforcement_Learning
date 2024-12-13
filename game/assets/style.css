@@ -1,0 +1,109 @@
+
+body {
+    background-color: green;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+#game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+}
+.navbar {
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#play-btn {
+    background-color: #007BFF;
+}
+
+#hit-btn {
+    background-color:#e8f625;
+}
+
+#stand-btn {
+    background-color: #b02bd5;
+}
+
+#new-round-btn {
+    background-color: #FFC107;
+}
+
+#ai-play-btn {
+    background-color:  #f64c4c;
+}
+
+#play-btn:disabled, #hit-btn:disabled, #stand-btn:disabled, #new-round-btn:disabled, #ai-play-btn:disabled {
+    background-color: #999;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+
+#card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.card {
+    width: 80px;
+    height: 120px;
+    background-size: cover;
+    margin: 0 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}
+
+#scoreboard {
+    padding: 20px;
+    font-size: 24px;
+    color: #FFDDC1;
+    text-align: center;
+    margin-top: 20px;
+    background-color: #333; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+    width: 80%; 
+    height: 120%; 
+    margin: 0 auto; 
+}
+
+#game-message {
+    font-size: 24px;
+    color: #FFDDC1;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.card-container img {
+    width: 100px;
+    height: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}

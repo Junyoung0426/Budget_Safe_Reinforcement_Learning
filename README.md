@@ -5,6 +5,7 @@
   - [Motivation](#motivation)
   - [Goal](#goal)
 - [Environment](#environment)
+- [Directory Structure](#directory-structure)
 - [Proposed Method](#proposed-method)
   - [Budget-Safe Q-learning](#budget-safe-q-learning)
   - [Situation-Aware Betting Strategy (SABS)](#situation-aware-betting-strategy-sabs)
@@ -28,13 +29,7 @@ This project aims to address this limitation by designing a **budget-safe RL alg
 Our objective is to develop an RL algorithm that ensures:
 - **Low risk of bust**: Avoid running out of budget during learning.
 - **High cumulative reward**: Maximize budget growth over time.
-
-This balance is illustrated by comparing two simple strategies:
-- Betting $1: Low risk but low rewards.
-- Betting $3: High rewards but high risk.
-
 Our approach combines the advantages of both to achieve the goal.
-
 ---
 
 ## Environment
@@ -47,8 +42,19 @@ The following libraries and tools were used:
 - **Dash**: 2.17.1
 - **Matplotlib**: 3.9.0
 - **Gym Environment**: `Blackjack-v1`
-
 ---
+
+## Directory Structure
+The project is organized as follows:
+
+```plaintext
+.
+├── betting_agent/       # Safe RL execution logic and betting strategy
+├── compare/             # Compare different RL models for Blackjack
+├── game/                # Gameplay with the best-performing RL model
+├── models/              # Pretrained Blackjack RL models
+├── main.py              # Main file to run the FastAPI application
+└── README.md            # Project documentation
 
 ## Proposed Method
 

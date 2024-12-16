@@ -97,7 +97,7 @@ This project proposed a **Budget-Safe RL framework** that separates the learning
 
 Experiments demonstrated that our approach effectively balances risk and reward, making it a promising solution for budget-constrained RL applications.
 
-## How to Run the RL Project
+## How to Run 
 
 Follow the steps below to set up and run the RL project.
 

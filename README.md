@@ -100,16 +100,19 @@ Experiments demonstrated that our approach effectively balances risk and reward,
 
 Follow these steps to set up and run the project:
 ### 1. Clone the Repository
+Clone the repository from GitHub:
 ```bash
-git clone <repo-url>
-cd <repo-folder>
+git clone https://github.com/Junyoung0426/RL_Project.git
+cd RL_Project
 
 ### 2. Create a Virtual Environment
+```bash
 python -m venv venv
 source venv/bin/activate          # On Linux/Mac
 venv\Scripts\activate             # On Windows
 
 ### 3. Run the FastAPI Application
+```bash
 python main.py
 
 ### 4. Access the Application

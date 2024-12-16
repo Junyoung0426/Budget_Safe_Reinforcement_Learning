@@ -17,6 +17,8 @@
 - [How to Run](#how-to-run)
 
 ---
+![image](https://github.com/user-attachments/assets/96de336e-53cd-4298-a744-d429dc4c2c02)
+![image](https://github.com/user-attachments/assets/44de3de0-b7ee-44f5-8968-eb7fccf48fd2)
 
 ## Introduction
 
@@ -36,7 +38,7 @@ Our approach combines the advantages of both to achieve the goal.
 
 ## Environment
 
-The following libraries and tools were used:
+The following libraries and tools were used( Check requirenment.txt file)
 - **Python**: 3.10.1
 - **PyTorch**: 2.3.0+cu118
 - **NumPy**: 1.26.4

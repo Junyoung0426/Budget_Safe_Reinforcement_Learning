@@ -1,4 +1,5 @@
 # Budget-Safe Reinforcement Learning for Gambling
+![image](https://github.com/user-attachments/assets/96de336e-53cd-4298-a744-d429dc4c2c02)
 
 ## Table of Contents
 - [Environment](#environment)
@@ -17,8 +18,6 @@
 - [How to Run](#how-to-run)
 
 ---
-![image](https://github.com/user-attachments/assets/96de336e-53cd-4298-a744-d429dc4c2c02)
-![image](https://github.com/user-attachments/assets/44de3de0-b7ee-44f5-8968-eb7fccf48fd2)
 
 ## Introduction
 

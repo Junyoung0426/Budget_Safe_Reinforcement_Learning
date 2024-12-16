@@ -96,30 +96,58 @@ This project proposed a **Budget-Safe RL framework** that separates the learning
 
 Experiments demonstrated that our approach effectively balances risk and reward, making it a promising solution for budget-constrained RL applications.
 
-## How to Run
+## How to Run the RL Project
 
-Follow these steps to set up and run the project:
+Follow the steps below to set up and run the RL project.
+
 ### 1. Clone the Repository
 Clone the repository from GitHub:
 ```bash
 git clone https://github.com/Junyoung0426/RL_Project.git
 cd RL_Project
+```
 
 ### 2. Create a Virtual Environment
+Set up a Python virtual environment to manage dependencies:
+
+#### On Linux/Mac:
 ```bash
 python -m venv venv
-source venv/bin/activate          # On Linux/Mac
-venv\Scripts\activate             # On Windows
+source venv/bin/activate
+```
 
-### 3. Run the FastAPI Application
+#### On Windows:
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### 3. Install Dependencies
+Install the required Python packages:
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Run the FastAPI Application
+Start the FastAPI server:
 ```bash
 python main.py
+```
 
-### 4. Access the Application
-Once the server is running, open your browser and go to:
+### 5. Access the Application
+Once the server is running, open your browser and navigate to:
 
-URL: http://127.0.0.1:8080/game/
-From this interface, you can:
+**URL:** [http://127.0.0.1:8080/game/](http://127.0.0.1:8080/game/)
 
-Compare different RL models for Blackjack.
-Play Blackjack using the trained RL models.
+#### Features:
+- **Compare RL Models**: Evaluate the performance of different RL models for Blackjack.
+- **Play Blackjack**: Interact and play Blackjack using trained RL models directly from the interface.
+
+---
+
+## Notes
+- Ensure all dependencies are installed before running the application.
+- The application uses FastAPI for the backend. If you encounter any issues, check the logs or verify the `main.py` script.
+
+For further assistance or issues, please reach out via the [GitHub repository](https://github.com/Junyoung0426/RL_Project/issues).
+

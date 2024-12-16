@@ -1,11 +1,12 @@
 # Budget-Safe Reinforcement Learning for Gambling
 
 ## Table of Contents
+- [Environment](#environment)
+- [Directory Structure](#directory-structure)
 - [Introduction](#introduction)
   - [Motivation](#motivation)
   - [Goal](#goal)
-- [Environment](#environment)
-- [Directory Structure](#directory-structure)
+
 - [Proposed Method](#proposed-method)
   - [Budget-Safe Q-learning](#budget-safe-q-learning)
   - [Situation-Aware Betting Strategy (SABS)](#situation-aware-betting-strategy-sabs)
@@ -13,6 +14,7 @@
   - [Tic-Tac-Toe](#tic-tac-toe)
   - [Blackjack with Dynamic Betting](#blackjack-with-dynamic-betting)
 - [Conclusion](#conclusion)
+- [How to Run](#how-to-run)
 
 ---
 
@@ -47,14 +49,12 @@ The following libraries and tools were used:
 ## Directory Structure
 The project is organized as follows:
 
-```plaintext
-.
-├── betting_agent/       # Safe RL execution logic and betting strategy
-├── compare/             # Compare different RL models for Blackjack
-├── game/                # Gameplay with the best-performing RL model
-├── models/              # Pretrained Blackjack RL models
-├── main.py              # Main file to run the FastAPI application
-└── README.md            # Project documentation
+- betting_agent       # Safe RL execution logic and betting strategy
+- compare             # Compare different RL models for Blackjack
+-  game                # Gameplay with the best-performing RL model
+-  models              # Pretrained Blackjack RL models
+-  main.py              # Main file to run the FastAPI application
+
 
 ## Proposed Method
 
@@ -96,6 +96,27 @@ This project proposed a **Budget-Safe RL framework** that separates the learning
 
 Experiments demonstrated that our approach effectively balances risk and reward, making it a promising solution for budget-constrained RL applications.
 
----
+## How to Run
 
-Stay tuned for further updates and implementation details!
+Follow these steps to set up and run the project:
+### 1. Clone the Repository
+```bash
+git clone <repo-url>
+cd <repo-folder>
+
+### 2. Create a Virtual Environment
+python -m venv venv
+source venv/bin/activate          # On Linux/Mac
+venv\Scripts\activate             # On Windows
+
+### 3. Run the FastAPI Application
+python main.py
+
+### 4. Access the Application
+Once the server is running, open your browser and go to:
+
+URL: http://127.0.0.1:8080/game/
+From this interface, you can:
+
+Compare different RL models for Blackjack.
+Play Blackjack using the trained RL models.

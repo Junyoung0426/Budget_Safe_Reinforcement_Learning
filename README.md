@@ -1,4 +1,5 @@
 # Budget-Safe Reinforcement Learning for Gambling
+![image](https://github.com/user-attachments/assets/96de336e-53cd-4298-a744-d429dc4c2c02)
 
 ## Table of Contents
 - [Environment](#environment)
@@ -36,7 +37,7 @@ Our approach combines the advantages of both to achieve the goal.
 
 ## Environment
 
-The following libraries and tools were used:
+The following libraries and tools were used( Check requirenment.txt file)
 - **Python**: 3.10.1
 - **PyTorch**: 2.3.0+cu118
 - **NumPy**: 1.26.4

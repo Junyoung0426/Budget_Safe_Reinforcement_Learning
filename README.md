@@ -2,12 +2,12 @@
 ![image](https://github.com/user-attachments/assets/96de336e-53cd-4298-a744-d429dc4c2c02)
 
 ## Table of Contents
-- [Directory Structure](#directory-structure)
 - [Introduction](#introduction)
   - [Motivation](#motivation)
   - [Goal](#goal)
   - [Environment](#environment)
-
+  - [Directory Structure](#directory-structure)
+  
 - [Proposed Method](#proposed-method)
   - [Budget-Safe Q-learning](#budget-safe-q-learning)
   - [Situation-Aware Betting Strategy (SABS)](#situation-aware-betting-strategy-sabs)

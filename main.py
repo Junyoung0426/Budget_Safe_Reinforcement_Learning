@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 import uvicorn
-from game.app import app as game_app
+from blackjack_game.app import app as game_app
 
 main_app = FastAPI()
 

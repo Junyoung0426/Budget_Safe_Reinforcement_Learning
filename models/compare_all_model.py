@@ -10,22 +10,23 @@ from dqn.dqn_agent import DQNAgent
 import matplotlib.pyplot as plt
 
 
+num_episodes=50000
 
 env = gym.make('Blackjack-v1')
 
 qagent = QLearningAgent(env, learning_rate=0.01, discount_factor=0.99, epsilon_start=1.0, epsilon_min=0.01, epsilon_decay=0.9995, initial_balance=1000000, bet_amount=1000)
-qagent.train(num_episodes=50000)
+qagent.train(num_episodes)
 
 ucb_agent =  UCBQLearningAgent(
     env=env, learning_rate=0.01, discount_factor=0.99, eps=1.0, eps_decay=0.9995, beta=1.0, initial_balance=1000000, bet_amount=1000
 )
-ucb_agent.train(num_episodes=50000)
+ucb_agent.train(num_episodes)
 
 dqnagent = DQNAgent(env, learning_rate=0.01, discount_factor=0.99, epsilon_start=1.0, epsilon_end=0.01, epsilon_decay=0.9995, batch_size=64, memory_size=10000, bet_amount=1000, initial_money=1000000)
-dqnagent.train(num_episodes=50000)
+dqnagent.train(num_episodes)
 
 ddqnagent = DDQNAgent(env, learning_rate=0.01, discount_factor=0.99, epsilon_start=1.0, epsilon_end=0.01, epsilon_decay=0.9995, batch_size=64, memory_size=10000, bet_amount=1000, initial_money=1000000)
-ddqnagent.train(num_episodes=50000)
+ddqnagent.train(num_episodes)
 
 
 
@@ -60,7 +61,7 @@ agents_results = {
 
 compare_agents_plot(agents_results)
 
-compare_dir = Path(__file__).resolve().parent.parent.parent  / "compare" / "action_file"
+compare_dir = Path(__file__).resolve().parent.parent / "compare" / "action_file"
 compare_dir.mkdir(exist_ok=True) 
 
 q_table_path = compare_dir / "q_learning_model.pkl"

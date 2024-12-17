@@ -50,6 +50,7 @@ def compare_agents_plot(agents_results):
     plt.show()
 
 
+
 agents_results = {
     "UCB Q-Learning": (ucb_agent.win_rate, ucb_agent.balance_history),
     "Q-Learning": (qagent.win_rate, qagent.balance_history),
@@ -58,3 +59,23 @@ agents_results = {
 }
 
 compare_agents_plot(agents_results)
+
+compare_dir = Path(__file__).resolve().parent.parent.parent  / "compare" / "action_file"
+compare_dir.mkdir(exist_ok=True) 
+
+q_table_path = compare_dir / "q_learning_model.pkl"
+qagent.save_q_table(q_table_path)
+
+print(f"Q-learning model saved ")
+ucb_qtable_path= compare_dir / "ucb_qlearning_model.pkl"
+ucb_agent.save_q_table(ucb_qtable_path)
+
+print(f"UCB Q-learning model saved as {ucb_qtable_path}")
+
+dqn_table_path = compare_dir / "dqn_model.pth"
+dqnagent.save_model(dqn_table_path)
+print("DQN model saved as dqn_model.pth")
+
+ddqn_table_path = compare_dir / "ddqn_model.pth"
+ddqnagent.save_model(ddqn_table_path)
+print("DQN model saved as dqn_model.pth")

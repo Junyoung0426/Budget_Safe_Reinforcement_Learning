@@ -12,7 +12,6 @@ ucb_agent.train(num_episodes=50000)
 compare_dir = Path(__file__).resolve().parent.parent.parent  / "compare" / "action_file"
 compare_dir.mkdir(exist_ok=True)  
 
-# 학습된 Q-table 저장
 ucb_qtable_path= compare_dir / "ucb_qlearning_model.pkl"
 ucb_agent.save_q_table(ucb_qtable_path)
 

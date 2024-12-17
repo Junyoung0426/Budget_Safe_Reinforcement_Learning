@@ -103,8 +103,7 @@ Follow the steps below to set up and run the RL project.
 ### 1. Clone the Repository
 Clone the repository from GitHub:
 ```bash
-git clone https://github.com/Junyoung0426/RL_Project.git
-cd RL_Project
+git clone https://github.com/Junyoung0426/RL_Project.git](https://github.com/Junyoung0426/Budget_Safe_Reinforcement_Learning.git
 ```
 
 ### 2. Create a Virtual Environment

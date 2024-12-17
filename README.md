@@ -2,11 +2,11 @@
 ![image](https://github.com/user-attachments/assets/96de336e-53cd-4298-a744-d429dc4c2c02)
 
 ## Table of Contents
-- [Environment](#environment)
 - [Directory Structure](#directory-structure)
 - [Introduction](#introduction)
   - [Motivation](#motivation)
   - [Goal](#goal)
+  - [Environment](#environment)
 
 - [Proposed Method](#proposed-method)
   - [Budget-Safe Q-learning](#budget-safe-q-learning)
@@ -35,7 +35,7 @@ Our objective is to develop an RL algorithm that ensures:
 Our approach combines the advantages of both to achieve the goal.
 ---
 
-## Environment
+### Environment
 
 The following libraries and tools were used( Check requirenment.txt file)
 - **Python**: 3.10.1

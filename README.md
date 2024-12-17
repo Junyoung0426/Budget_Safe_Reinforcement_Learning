@@ -50,10 +50,9 @@ The following libraries and tools were used( Check requirenment.txt file)
 ## Directory Structure
 The project is organized as follows:
 
-- betting_agent       # Safe RL execution logic and betting strategy
-- compare             # Compare different RL models for Blackjack
--  game                # Gameplay with the best-performing RL model
--  models              # Pretrained Blackjack RL models
+-  betting_agent.py       # Safe RL execution logic and betting strategy
+-  game.py                # Gameplay with the best-performing RL model
+-  models.py             # trained Blackjack RL models and compare all models
 -  main.py              # Main file to run the FastAPI application
 
 

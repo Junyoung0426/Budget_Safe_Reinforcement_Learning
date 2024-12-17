@@ -131,7 +131,7 @@ dash_app.layout = html.Div([
         dcc.Input(id="initial-balance", type="number", value=1000000, min=0, style={"width": "100px", "marginRight": "20px"}),
 
         html.Label("Number of Games:"),
-        dcc.Input(id="num-of-games", type="number", value=10, min=1, style={"width": "80px", "marginRight": "10px"}),
+        dcc.Input(id="num-of-games", type="number", value=500, min=1, style={"width": "80px", "marginRight": "10px"}),
 
         html.Label("Betting Amount:"),
         dcc.Input(id="bet-amount", type="number", value=100, min=1, style={"width": "80px", "marginRight": "10px"}),
@@ -322,7 +322,18 @@ def ai_play(ai_clicks, stop_clicks, reset_clicks, n_intervals, num_of_games, ini
 
     if triggered_id == "stop-btn":
         win_rate_fig, balance_fig = generate_result_figures()
-        return render_card_images(dealer_cards), *[render_card_images(player_cards[agent]) for agent in agents], win_rate_fig, balance_fig, True, n_intervals, initial_balance, num_of_games, bet_amount_input
+        return (
+            render_card_images(dealer_cards),
+            *[render_card_images(player_cards[agent]) for agent in agents],
+            win_rate_fig,
+            balance_fig,
+            True,   
+            n_intervals,  
+            initial_balance,
+            num_of_games,
+            bet_amount_input,
+        )
+
 
     if triggered_id == "ai-interval" and n_intervals < num_of_games:
         initial_dealer_cards = [draw_random_card(), draw_random_card()]

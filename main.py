@@ -1,13 +1,11 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 import uvicorn
-from compare.ai import app as compare_app
 from game.app import app as game_app
 
 main_app = FastAPI()
 
 main_app.mount("/game", game_app)
-main_app.mount("/compare", compare_app)
 
 @main_app.get("/")
 async def root():

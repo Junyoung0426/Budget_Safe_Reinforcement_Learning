@@ -65,60 +65,13 @@ game_over = False
 env = gym.make('Blackjack-v1')
 agent = DQNAgent(env)
 project_root = Path(__file__).resolve().parent.parent
-model_path = project_root / "compare/action_file/dqn_model.pth"
+model_path = project_root / "models/action_file/dqn_model.pth"
 agent.load_model(str(model_path))
 
-
-def navbar():
-    return html.Div(
-        [
-            html.A(
-                "Game",
-                href="/game",
-                style={
-                    "marginRight": "20px",
-                    "padding": "10px 20px",
-                    "textDecoration": "none",
-                    "color": "#4CAF50",  
-                    "backgroundColor": "#FFFFFF", 
-                    "borderRadius": "5px",
-                    "fontSize": "16px",
-                    "fontWeight": "bold",
-                    "boxShadow": "0px 2px 4px rgba(0, 0, 0, 0.2)",  
-                    "transition": "background-color 0.3s ease",
-                },
-            ),
-            html.A(
-                "Compare Models",
-                href="/compare",
-                style={
-                    "marginRight": "20px",
-                    "padding": "10px 20px",
-                    "textDecoration": "none",
-                    "color": "#4CAF50",  
-                    "backgroundColor": "#FFFFFF",  
-                    "borderRadius": "5px",
-                    "fontSize": "16px",
-                    "fontWeight": "bold",
-                    "boxShadow": "0px 2px 4px rgba(0, 0, 0, 0.2)", 
-                    "transition": "background-color 0.3s ease",
-                },
-            ),
-        ],
-        style={
-            "padding": "15px",
-            "textAlign": "center",
-            "backgroundColor": "rgba(255, 255, 255, 0.8)",  
-            "boxShadow": "0px 4px 6px rgba(0, 0, 0, 0.1)",
-            "borderRadius": "10px",  
-            "margin": "10px 20px",  
-        },
-    )
 
 
 dash_app.layout = html.Div([
     html.H1("Blackjack Game", style={'textAlign': 'center'}),
-    navbar(),
     html.Div([
         html.Label("Initial Balance:", style={'fontSize': '16px', 'marginRight': '10px'}),
         dcc.Input(

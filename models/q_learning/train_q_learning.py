@@ -8,10 +8,10 @@ agent = QLearningAgent(env, learning_rate=0.01, discount_factor=0.99, epsilon_st
 
 agent.train(num_episodes=50000)
 
-compare_dir = Path(__file__).resolve().parent.parent.parent  / "compare" / "action_file"
-compare_dir.mkdir(exist_ok=True) 
+save_dir = Path(__file__).resolve().parent.parent / "action_file"
+save_dir.mkdir(exist_ok=True) 
 
-q_table_path = compare_dir / "q_learning_model.pkl"
+q_table_path = save_dir / "q_learning_model.pkl"
 agent.save_q_table(q_table_path)
 
 print(f"Q-learning model saved ")

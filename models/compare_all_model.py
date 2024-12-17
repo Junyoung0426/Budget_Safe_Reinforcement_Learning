@@ -61,22 +61,22 @@ agents_results = {
 
 compare_agents_plot(agents_results)
 
-compare_dir = Path(__file__).resolve().parent.parent / "compare" / "action_file"
-compare_dir.mkdir(exist_ok=True) 
+save_dir = Path(__file__).resolve().parent / "action_file"
+save_dir.mkdir(exist_ok=True) 
 
-q_table_path = compare_dir / "q_learning_model.pkl"
+q_table_path = save_dir / "q_learning_model.pkl"
 qagent.save_q_table(q_table_path)
 
 print(f"Q-learning model saved ")
-ucb_qtable_path= compare_dir / "ucb_qlearning_model.pkl"
+ucb_qtable_path= save_dir / "ucb_qlearning_model.pkl"
 ucb_agent.save_q_table(ucb_qtable_path)
 
 print(f"UCB Q-learning model saved as {ucb_qtable_path}")
 
-dqn_table_path = compare_dir / "dqn_model.pth"
+dqn_table_path = save_dir / "dqn_model.pth"
 dqnagent.save_model(dqn_table_path)
 print("DQN model saved as dqn_model.pth")
 
-ddqn_table_path = compare_dir / "ddqn_model.pth"
+ddqn_table_path = save_dir / "ddqn_model.pth"
 ddqnagent.save_model(ddqn_table_path)
 print("DQN model saved as dqn_model.pth")

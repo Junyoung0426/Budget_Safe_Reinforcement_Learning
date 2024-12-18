@@ -96,7 +96,7 @@ This project proposed a **Budget-Safe RL framework** that separates the learning
 
 Experiments demonstrated that our approach effectively balances risk and reward, making it a promising solution for budget-constrained RL applications.
 
-## How to Run 
+## How to play the blackjack game (not included betting agent) 
 
 Follow the steps below to set up and run the RL project.
 
